@@ -332,6 +332,206 @@
             border-radius: 4px;
             padding: 4px;
         }
+
+        /* Модальное окно */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #edebe9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #323130;
+        }
+
+        .close-button {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #605e5c;
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-button:hover {
+            background-color: #edebe9;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: #323130;
+        }
+
+        .form-input, .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #edebe9;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #0078d4;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 16px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .attendees-list {
+            margin-top: 8px;
+            border: 1px solid #edebe9;
+            border-radius: 4px;
+            max-height: 120px;
+            overflow-y: auto;
+        }
+
+        .attendee-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #edebe9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .attendee-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-attendee {
+            background: none;
+            border: none;
+            color: #d32f2f;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px;
+            border-radius: 2px;
+        }
+
+        .remove-attendee:hover {
+            background-color: #ffebee;
+        }
+
+        .add-attendee-btn {
+            background-color: #f3f2f1;
+            border: 1px dashed #edebe9;
+            color: #605e5c;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .add-attendee-btn:hover {
+            background-color: #edebe9;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid #edebe9;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #0078d4;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #106ebe;
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: #323130;
+            border: 1px solid #edebe9;
+        }
+
+        .btn-secondary:hover {
+            background-color: #f3f2f1;
+        }
+
+        .selected-date {
+            font-size: 14px;
+            color: #605e5c;
+            margin-bottom: 16px;
+            padding: 8px 12px;
+            background-color: #faf9f8;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -414,6 +614,62 @@
         </div>
     </div>
 
+    <!-- Модальное окно для создания встречи -->
+    <div class="modal" id="event-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Новая встреча</div>
+                <button class="close-button" id="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="selected-date" id="selected-date-info">
+                    Дата: 12 июня 2023
+                </div>
+                <form id="event-form">
+                    <div class="form-group">
+                        <label class="form-label" for="event-title">Название встречи *</label>
+                        <input type="text" class="form-input" id="event-title" placeholder="Введите название встречи" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="event-location">Место встречи</label>
+                        <input type="text" class="form-input" id="event-location" placeholder="Введите место встречи">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Участники</label>
+                        <div class="attendees-list" id="attendees-list">
+                            <!-- Список участников будет добавляться здесь -->
+                        </div>
+                        <button type="button" class="add-attendee-btn" id="add-attendee-btn">
+                            + Добавить участника
+                        </button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label" for="event-date">Дата</label>
+                            <input type="date" class="form-input" id="event-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="event-time">Время</label>
+                            <input type="time" class="form-input" id="event-time" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="event-description">Описание</label>
+                        <textarea class="form-textarea" id="event-description" placeholder="Добавьте описание встречи"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancel-event">Отмена</button>
+                <button type="button" class="btn btn-primary" id="save-event">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Элементы DOM
@@ -427,10 +683,22 @@
             const weekGrid = document.getElementById('week-grid');
             const dayGrid = document.getElementById('day-grid');
             const dayHeaderDate = document.getElementById('day-header-date');
+            
+            // Элементы модального окна
+            const eventModal = document.getElementById('event-modal');
+            const closeModalButton = document.getElementById('close-modal');
+            const cancelEventButton = document.getElementById('cancel-event');
+            const saveEventButton = document.getElementById('save-event');
+            const selectedDateInfo = document.getElementById('selected-date-info');
+            const eventForm = document.getElementById('event-form');
+            const addAttendeeBtn = document.getElementById('add-attendee-btn');
+            const attendeesList = document.getElementById('attendees-list');
 
             // Текущее состояние
             let currentDate = new Date();
             let currentView = 'month';
+            let selectedDate = new Date();
+            let attendees = [];
 
             // Пример событий
             const events = [
@@ -454,6 +722,12 @@
                     switchView(this.dataset.view);
                 });
             });
+
+            // Обработчики модального окна
+            closeModalButton.addEventListener('click', closeModal);
+            cancelEventButton.addEventListener('click', closeModal);
+            saveEventButton.addEventListener('click', saveEvent);
+            addAttendeeBtn.addEventListener('click', addAttendee);
 
             // Функции
             function initCalendar() {
@@ -556,9 +830,16 @@
                 addButton.textContent = '+';
                 addButton.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    alert(`Добавить событие на ${date.toLocaleDateString()}`);
+                    openEventModal(date);
                 });
                 dayElement.appendChild(addButton);
+                
+                // Обработчик клика по всему дню
+                dayElement.addEventListener('click', function(e) {
+                    if (e.target !== addButton) {
+                        openEventModal(date);
+                    }
+                });
                 
                 calendarDaysElement.appendChild(dayElement);
             }
@@ -635,12 +916,15 @@
                         dayCell.className = 'time-slot';
                         dayCell.style.gridColumn = `${day + 2}`;
                         dayCell.style.gridRow = `${hour + 1}`;
+                        
+                        const dayDate = new Date(startOfWeek);
+                        dayDate.setDate(startOfWeek.getDate() + day);
+                        dayDate.setHours(hour);
+                        
                         dayCell.addEventListener('click', function() {
-                            const clickedDate = new Date(startOfWeek);
-                            clickedDate.setDate(startOfWeek.getDate() + day);
-                            clickedDate.setHours(hour);
-                            alert(`Добавить событие на ${clickedDate.toLocaleString()}`);
+                            openEventModal(dayDate);
                         });
+                        
                         weekGrid.appendChild(dayCell);
                     }
                 }
@@ -680,11 +964,14 @@
                     dayCell.className = 'time-slot';
                     dayCell.style.gridColumn = '2';
                     dayCell.style.gridRow = `${hour + 1}`;
+                    
+                    const dayDate = new Date(currentDate);
+                    dayDate.setHours(hour);
+                    
                     dayCell.addEventListener('click', function() {
-                        const clickedDate = new Date(currentDate);
-                        clickedDate.setHours(hour);
-                        alert(`Добавить событие на ${clickedDate.toLocaleString()}`);
+                        openEventModal(dayDate);
                     });
+                    
                     dayGrid.appendChild(dayCell);
                 }
             }
@@ -740,6 +1027,118 @@
                 const diff = result.getDate() - day;
                 result.setDate(diff);
                 return result;
+            }
+
+            function openEventModal(date) {
+                selectedDate = new Date(date);
+                
+                // Обновляем информацию о выбранной дате
+                const dayNames = ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'];
+                const monthNames = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 
+                                   'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+                
+                const dayName = dayNames[selectedDate.getDay()];
+                const dayNumber = selectedDate.getDate();
+                const monthName = monthNames[selectedDate.getMonth()];
+                const year = selectedDate.getFullYear();
+                const time = selectedDate.toTimeString().substring(0, 5);
+                
+                selectedDateInfo.textContent = `${dayName}, ${dayNumber} ${monthName} ${year} г., ${time}`;
+                
+                // Исправляем проблему с часовым поясом - создаем дату в локальном формате
+                const localDate = new Date(selectedDate.getTime() - (selectedDate.getTimezoneOffset() * 60000));
+                const dateString = localDate.toISOString().split('T')[0];
+                
+                // Заполняем поля даты и времени
+                document.getElementById('event-date').value = dateString;
+                document.getElementById('event-time').value = time;
+                
+                // Очищаем форму
+                document.getElementById('event-title').value = '';
+                document.getElementById('event-location').value = '';
+                document.getElementById('event-description').value = '';
+                attendees = [];
+                updateAttendeesList();
+                
+                // Показываем модальное окно
+                eventModal.classList.add('active');
+            }
+
+            function closeModal() {
+                eventModal.classList.remove('active');
+            }
+
+            function addAttendee() {
+                const email = prompt('Введите email участника:');
+                if (email && email.trim() !== '') {
+                    attendees.push(email.trim());
+                    updateAttendeesList();
+                }
+            }
+
+            function updateAttendeesList() {
+                attendeesList.innerHTML = '';
+                
+                if (attendees.length === 0) {
+                    const emptyMessage = document.createElement('div');
+                    emptyMessage.className = 'attendee-item';
+                    emptyMessage.textContent = 'Участники не добавлены';
+                    emptyMessage.style.color = '#a19f9d';
+                    emptyMessage.style.fontStyle = 'italic';
+                    attendeesList.appendChild(emptyMessage);
+                } else {
+                    attendees.forEach((attendee, index) => {
+                        const attendeeItem = document.createElement('div');
+                        attendeeItem.className = 'attendee-item';
+                        
+                        const attendeeEmail = document.createElement('span');
+                        attendeeEmail.textContent = attendee;
+                        
+                        const removeButton = document.createElement('button');
+                        removeButton.className = 'remove-attendee';
+                        removeButton.textContent = 'Удалить';
+                        removeButton.addEventListener('click', function() {
+                            attendees.splice(index, 1);
+                            updateAttendeesList();
+                        });
+                        
+                        attendeeItem.appendChild(attendeeEmail);
+                        attendeeItem.appendChild(removeButton);
+                        attendeesList.appendChild(attendeeItem);
+                    });
+                }
+            }
+
+            function saveEvent() {
+                const title = document.getElementById('event-title').value;
+                const location = document.getElementById('event-location').value;
+                const date = document.getElementById('event-date').value;
+                const time = document.getElementById('event-time').value;
+                const description = document.getElementById('event-description').value;
+                
+                if (!title) {
+                    alert('Пожалуйста, введите название встречи');
+                    return;
+                }
+                
+                // Создаем новое событие - исправляем проблему с часовым поясом
+                const eventDate = new Date(date + 'T' + time);
+                // Корректируем время с учетом часового пояса
+                const correctedDate = new Date(eventDate.getTime() + (eventDate.getTimezoneOffset() * 60000));
+                
+                const newEvent = {
+                    date: correctedDate,
+                    title: title,
+                    location: location,
+                    description: description,
+                    attendees: [...attendees],
+                    type: 'meeting'
+                };
+                
+                events.push(newEvent);
+                alert('Встреча успешно создана!');
+                closeModal();
+                renderCalendar();
             }
         });
     </script>
