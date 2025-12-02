@@ -5,6 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Календарь Outlook</title>
     <style>
+        :root {
+            /* Темная тема по умолчанию */
+            --bg-primary: #1f1f1f;
+            --bg-secondary: #2d2d2d;
+            --bg-tertiary: #3d3d3d;
+            --text-primary: #ffffff;
+            --text-secondary: #a19f9d;
+            --text-tertiary: #605e5c;
+            --border-color: #4d4d4d;
+            --accent-color: #0078d4;
+            --accent-hover: #106ebe;
+            --event-bg: #1e3a5f;
+            --event-border: #0078d4;
+            --important-bg: #4a1f1f;
+            --important-border: #d32f2f;
+            --meeting-bg: #3a1f4a;
+            --meeting-border: #7b1fa2;
+            --modal-bg: #2d2d2d;
+            --modal-border: #4d4d4d;
+            --button-bg: #3d3d3d;
+            --button-hover: #4d4d4d;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #f3f2f1;
+            --bg-secondary: #faf9f8;
+            --bg-tertiary: #ffffff;
+            --text-primary: #323130;
+            --text-secondary: #605e5c;
+            --text-tertiary: #a19f9d;
+            --border-color: #edebe9;
+            --accent-color: #0078d4;
+            --accent-hover: #106ebe;
+            --event-bg: #e1f5fe;
+            --event-border: #0078d4;
+            --important-bg: #ffebee;
+            --important-border: #d32f2f;
+            --meeting-bg: #f3e5f5;
+            --meeting-border: #7b1fa2;
+            --modal-bg: #ffffff;
+            --modal-border: #edebe9;
+            --button-bg: #f3f2f1;
+            --button-hover: #edebe9;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,19 +58,21 @@
         }
 
         body {
-            background-color: #f3f2f1;
-            color: #323130;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             display: flex;
             height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
         }
 
         .sidebar {
             width: 250px;
-            background-color: #faf9f8;
-            border-right: 1px solid #edebe9;
+            background-color: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
             padding: 16px;
             display: flex;
             flex-direction: column;
+            transition: all 0.3s;
         }
 
         .logo {
@@ -37,7 +84,7 @@
         .logo-icon {
             width: 32px;
             height: 32px;
-            background-color: #0078d4;
+            background-color: var(--accent-color);
             border-radius: 4px;
             margin-right: 8px;
             display: flex;
@@ -59,14 +106,15 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            transition: background-color 0.2s;
         }
 
         .nav-item:hover {
-            background-color: #edebe9;
+            background-color: var(--button-hover);
         }
 
         .nav-item.active {
-            background-color: #e1dfdd;
+            background-color: var(--button-bg);
             font-weight: 600;
         }
 
@@ -102,13 +150,15 @@
             cursor: pointer;
             padding: 4px 8px;
             border-radius: 4px;
-            background-color: white;
-            border: 1px solid #edebe9;
+            background-color: var(--button-bg);
+            border: 1px solid var(--border-color);
             margin: 0 4px;
+            color: var(--text-primary);
+            transition: all 0.2s;
         }
 
         .nav-button:hover {
-            background-color: #edebe9;
+            background-color: var(--button-hover);
         }
 
         .current-date {
@@ -121,51 +171,74 @@
 
         .view-options {
             display: flex;
-            border: 1px solid #edebe9;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             overflow: hidden;
         }
 
         .view-option {
             padding: 6px 12px;
-            background-color: white;
+            background-color: var(--button-bg);
             border: none;
             cursor: pointer;
             font-size: 14px;
+            color: var(--text-primary);
             transition: all 0.2s;
         }
 
         .view-option:hover {
-            background-color: #f3f2f1;
+            background-color: var(--button-hover);
         }
 
         .view-option.active {
-            background-color: #0078d4;
+            background-color: var(--accent-color);
             color: white;
+        }
+
+        .theme-toggle {
+            margin-left: 16px;
+            padding: 6px 12px;
+            background-color: var(--button-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--button-hover);
+        }
+
+        .theme-icon {
+            font-size: 18px;
         }
 
         .calendar-grid {
             flex: 1;
-            background-color: white;
-            border: 1px solid #edebe9;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: all 0.3s;
         }
 
         .calendar-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            background-color: #faf9f8;
-            border-bottom: 1px solid #edebe9;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .weekday {
             padding: 12px;
             text-align: center;
             font-weight: 600;
-            color: #605e5c;
+            color: var(--text-secondary);
         }
 
         .calendar-days {
@@ -176,8 +249,8 @@
         }
 
         .calendar-day {
-            border-right: 1px solid #edebe9;
-            border-bottom: 1px solid #edebe9;
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
             padding: 8px;
             cursor: pointer;
             position: relative;
@@ -186,7 +259,7 @@
         }
 
         .calendar-day:hover {
-            background-color: #faf9f8;
+            background-color: var(--button-hover);
         }
 
         .calendar-day:nth-child(7n) {
@@ -194,8 +267,8 @@
         }
 
         .calendar-day.other-month {
-            background-color: #faf9f8;
-            color: #a19f9d;
+            background-color: var(--bg-secondary);
+            color: var(--text-tertiary);
         }
 
         .day-number {
@@ -209,14 +282,14 @@
         }
 
         .calendar-day.today .day-number {
-            background-color: #0078d4;
+            background-color: var(--accent-color);
             color: white;
             border-radius: 50%;
         }
 
         .event {
-            background-color: #e1f5fe;
-            border-left: 3px solid #0078d4;
+            background-color: var(--event-bg);
+            border-left: 3px solid var(--event-border);
             padding: 4px 6px;
             margin-bottom: 2px;
             border-radius: 2px;
@@ -225,16 +298,17 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            transition: all 0.3s;
         }
 
         .event.important {
-            background-color: #ffebee;
-            border-left-color: #d32f2f;
+            background-color: var(--important-bg);
+            border-left-color: var(--important-border);
         }
 
         .event.meeting {
-            background-color: #f3e5f5;
-            border-left-color: #7b1fa2;
+            background-color: var(--meeting-bg);
+            border-left-color: var(--meeting-border);
         }
 
         .add-event-btn {
@@ -243,11 +317,11 @@
             right: 8px;
             background: none;
             border: none;
-            color: #a19f9d;
+            color: var(--text-tertiary);
             cursor: pointer;
             font-size: 14px;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, background-color 0.2s;
             width: 24px;
             height: 24px;
             border-radius: 50%;
@@ -257,8 +331,8 @@
         }
 
         .add-event-btn:hover {
-            background-color: #edebe9;
-            color: #323130;
+            background-color: var(--button-hover);
+            color: var(--text-primary);
         }
 
         .calendar-day:hover .add-event-btn {
@@ -285,14 +359,14 @@
 
         .time-slot {
             height: 60px;
-            border-bottom: 1px solid #edebe9;
+            border-bottom: 1px solid var(--border-color);
             padding: 4px 8px;
             position: relative;
         }
 
         .time-label {
             font-size: 12px;
-            color: #605e5c;
+            color: var(--text-secondary);
         }
 
         .week-grid {
@@ -310,8 +384,8 @@
         .day-header, .week-header {
             display: grid;
             grid-template-columns: 80px repeat(7, 1fr);
-            background-color: #faf9f8;
-            border-bottom: 1px solid #edebe9;
+            background-color: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
             padding: 12px 0;
         }
 
@@ -322,12 +396,12 @@
         .header-cell {
             text-align: center;
             font-weight: 600;
-            color: #605e5c;
+            color: var(--text-secondary);
             padding: 0 8px;
         }
 
         .today-header {
-            background-color: #0078d4;
+            background-color: var(--accent-color);
             color: white;
             border-radius: 4px;
             padding: 4px;
@@ -341,7 +415,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.7);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -352,18 +426,20 @@
         }
 
         .modal-content {
-            background-color: white;
+            background-color: var(--modal-bg);
             border-radius: 8px;
             width: 500px;
             max-width: 90%;
             max-height: 90%;
             overflow-y: auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--modal-border);
+            transition: all 0.3s;
         }
 
         .modal-header {
             padding: 20px;
-            border-bottom: 1px solid #edebe9;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -372,7 +448,7 @@
         .modal-title {
             font-size: 20px;
             font-weight: 600;
-            color: #323130;
+            color: var(--text-primary);
         }
 
         .close-button {
@@ -380,17 +456,18 @@
             border: none;
             font-size: 24px;
             cursor: pointer;
-            color: #605e5c;
+            color: var(--text-secondary);
             width: 32px;
             height: 32px;
             border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background-color 0.2s;
         }
 
         .close-button:hover {
-            background-color: #edebe9;
+            background-color: var(--button-hover);
         }
 
         .modal-body {
@@ -405,21 +482,23 @@
             display: block;
             margin-bottom: 6px;
             font-weight: 600;
-            color: #323130;
+            color: var(--text-primary);
         }
 
         .form-input, .form-textarea {
             width: 100%;
             padding: 10px 12px;
-            border: 1px solid #edebe9;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 14px;
+            color: var(--text-primary);
             transition: border-color 0.2s;
         }
 
         .form-input:focus, .form-textarea:focus {
             outline: none;
-            border-color: #0078d4;
+            border-color: var(--accent-color);
         }
 
         .form-textarea {
@@ -438,7 +517,8 @@
 
         .attendees-list {
             margin-top: 8px;
-            border: 1px solid #edebe9;
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             max-height: 120px;
             overflow-y: auto;
@@ -446,7 +526,7 @@
 
         .attendee-item {
             padding: 8px 12px;
-            border-bottom: 1px solid #edebe9;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -464,32 +544,33 @@
             font-size: 12px;
             padding: 4px;
             border-radius: 2px;
+            transition: background-color 0.2s;
         }
 
         .remove-attendee:hover {
-            background-color: #ffebee;
+            background-color: var(--important-bg);
         }
 
         .add-attendee-btn {
-            background-color: #f3f2f1;
-            border: 1px dashed #edebe9;
-            color: #605e5c;
+            background-color: var(--button-bg);
+            border: 1px dashed var(--border-color);
+            color: var(--text-secondary);
             padding: 8px 12px;
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
             width: 100%;
             margin-top: 8px;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
         }
 
         .add-attendee-btn:hover {
-            background-color: #edebe9;
+            background-color: var(--button-hover);
         }
 
         .modal-footer {
             padding: 20px;
-            border-top: 1px solid #edebe9;
+            border-top: 1px solid var(--border-color);
             display: flex;
             justify-content: flex-end;
             gap: 12px;
@@ -506,35 +587,40 @@
         }
 
         .btn-primary {
-            background-color: #0078d4;
+            background-color: var(--accent-color);
             color: white;
         }
 
         .btn-primary:hover {
-            background-color: #106ebe;
+            background-color: var(--accent-hover);
         }
 
         .btn-secondary {
-            background-color: white;
-            color: #323130;
-            border: 1px solid #edebe9;
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
         }
 
         .btn-secondary:hover {
-            background-color: #f3f2f1;
+            background-color: var(--button-hover);
         }
 
         .selected-date {
             font-size: 14px;
-            color: #605e5c;
+            color: var(--text-secondary);
             margin-bottom: 16px;
             padding: 8px 12px;
-            background-color: #faf9f8;
+            background-color: var(--bg-secondary);
             border-radius: 4px;
+        }
+
+        /* Анимация переключения темы */
+        .theme-transition * {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
     </style>
 </head>
-<body>
+<body class="theme-transition">
     <div class="sidebar">
         <div class="logo">
             <div class="logo-icon">O</div>
@@ -566,10 +652,15 @@
                 <button class="nav-button" id="next-period">›</button>
                 <button class="nav-button" id="today-btn">Сегодня</button>
             </div>
-            <div class="view-options">
-                <button class="view-option" data-view="day">День</button>
-                <button class="view-option" data-view="week">Неделя</button>
-                <button class="view-option active" data-view="month">Месяц</button>
+            <div style="display: flex; align-items: center;">
+                <div class="view-options">
+                    <button class="view-option" data-view="day">День</button>
+                    <button class="view-option" data-view="week">Неделя</button>
+                    <button class="view-option active" data-view="month">Месяц</button>
+                </div>
+                <button class="theme-toggle" id="theme-toggle" title="Переключить тему">
+                    <span class="theme-icon" id="theme-icon">🌙</span>
+                </button>
             </div>
         </div>
 
@@ -694,6 +785,11 @@
             const addAttendeeBtn = document.getElementById('add-attendee-btn');
             const attendeesList = document.getElementById('attendees-list');
 
+            // Элементы темы
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const htmlElement = document.documentElement;
+
             // Текущее состояние
             let currentDate = new Date();
             let currentView = 'month';
@@ -709,7 +805,10 @@
                 { date: new Date(2023, 5, 25), title: 'Отпуск', type: 'default' }
             ];
 
-            // Инициализация
+            // Инициализация темы
+            initTheme();
+
+            // Инициализация календаря
             initCalendar();
 
             // Обработчики событий
@@ -729,7 +828,76 @@
             saveEventButton.addEventListener('click', saveEvent);
             addAttendeeBtn.addEventListener('click', addAttendee);
 
-            // Функции
+            // Обработчик переключения темы
+            themeToggle.addEventListener('click', toggleTheme);
+
+            // Функции для управления темой
+            function initTheme() {
+                // По умолчанию устанавливаем темную тему
+                let savedTheme = localStorage.getItem('calendar-theme');
+                
+                // Если тема сохранена, используем её
+                if (savedTheme) {
+                    htmlElement.setAttribute('data-theme', savedTheme);
+                    updateThemeIcon(savedTheme);
+                } else {
+                    // Проверяем предпочтения системы
+                    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+                    
+                    // Если система предпочитает светлую тему, устанавливаем её
+                    if (prefersLight) {
+                        htmlElement.setAttribute('data-theme', 'light');
+                        updateThemeIcon('light');
+                        localStorage.setItem('calendar-theme', 'light');
+                    } else {
+                        // Иначе оставляем темную тему (по умолчанию)
+                        htmlElement.setAttribute('data-theme', 'dark');
+                        updateThemeIcon('dark');
+                        localStorage.setItem('calendar-theme', 'dark');
+                    }
+                }
+
+                // Слушаем изменения системных предпочтений
+                window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+                    if (!localStorage.getItem('calendar-theme')) {
+                        if (e.matches) {
+                            htmlElement.setAttribute('data-theme', 'dark');
+                            updateThemeIcon('dark');
+                        }
+                    }
+                });
+
+                window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e) {
+                    if (!localStorage.getItem('calendar-theme')) {
+                        if (e.matches) {
+                            htmlElement.setAttribute('data-theme', 'light');
+                            updateThemeIcon('light');
+                        }
+                    }
+                });
+            }
+
+            function toggleTheme() {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('calendar-theme', newTheme);
+                updateThemeIcon(newTheme);
+            }
+
+            function updateThemeIcon(theme) {
+                if (theme === 'light') {
+                    themeIcon.textContent = '🌙';
+                    themeToggle.title = 'Переключить на темную тему';
+                } else {
+                    themeIcon.textContent = '☀️';
+                    themeToggle.title = 'Переключить на светлую тему';
+                }
+            }
+
+            // Функции календаря
             function initCalendar() {
                 renderCalendar();
             }
@@ -1083,7 +1251,7 @@
                     const emptyMessage = document.createElement('div');
                     emptyMessage.className = 'attendee-item';
                     emptyMessage.textContent = 'Участники не добавлены';
-                    emptyMessage.style.color = '#a19f9d';
+                    emptyMessage.style.color = 'var(--text-tertiary)';
                     emptyMessage.style.fontStyle = 'italic';
                     attendeesList.appendChild(emptyMessage);
                 } else {
